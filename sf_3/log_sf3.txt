@@ -1,0 +1,95 @@
+/usr/repos/Tools/output_data
+########################################################################################################################
+                                                  PDGF v2.5_#1343_b4177
+                                            Parallel Data Generation Framework
+                (c)bankmark UG (haftungsbeschraenkt), Frank M., Danisch M., Rabl T. http://www.bankmark.de
+########################################################################################################################
+                                                   License information
+                            The Software is provided to you as part of the TPC Benchmark DI. 
+ When using this software you must agree to the license provided in LICENSE.TXT of this package. Use is restricted to TPC
+DI benchmarking purposes as specified in LICENSE.TXT. If you would like to use the software for other purposes, you must
+contact bankmark UG (haftungsbeschraenkt) (http://www.bankmark.de) to purchase a fully licensed copy of the Software.
+########################################################################################################################
+for a command overview start with commandline parameter: -help
+or type "help" in the built in shell: PDGF:> 
+
+Set closeWhenDone from: false to: true
+Set project main scale factor from -notSet- to 3000.0
+Set default output path to:"/usr/repos/Tools/output_data/"
+Loading configuration files ...
+23: XML <property name="SF">5000.0 was already defined in config file or is manually overridden by a user set commandline argument. Currently assigned value: '3000.0' and will remain unchanged at this value
+Registered Generation event listner: tpc.di.output.AuditTotalRecordsSummaryWriter
+Loading successful.
+All required configuration files are loaded. You may start the generation process.
+Initializing system...
+Node 1 Worker count was not specified. Detected 5 available processors and start now same amount of workers
+FinWireFinBlackBox.initialize() LAST UPDATE ID: 202
+DailyMarketBlackBox.initialize() LAST UPDATE ID: 733
+initializing WatchHistoryBlackBox of table: 'WatchHistory'... done
+Cloning data structures for parallelization...
+Clone time 0h:00m:00s:096ms
+initialized 0h:00m:00s:271ms
+Starting data generation proccess...
+Startuptime: 0h:00m:00s:857ms
+FileChannelProvider is: pdgf.util.caching.fileWriter.OutputFileWriter$DefaultFileChannelProvider
+
+generating 1/16 "StatusType"	  rows: 1-6 of 6
+
+PDGF:> finished  1/16 "StatusType"	  in: 0h:00m:00s:005ms total size: 3.6 KiB average speed: 727.1 KiB/s
+
+generating 2/16 "TaxRate"	  rows: 1-320 of 320
+finished  2/16 "TaxRate"	  in: 0h:00m:00s:003ms total size: 16.7 KiB average speed: 5.4 MiB/s
+
+generating 3/16 "Date"	  rows: 1-25933 of 25933
+finished  3/16 "Date"	  in: 0h:00m:00s:416ms total size: 3.3 MiB average speed: 8.0 MiB/s
+
+generating 4/16 "Time"	  rows: 1-86400 of 86400
+finished  4/16 "Time"	  in: 0h:00m:00s:166ms total size: 4.6 MiB average speed: 27.5 MiB/s
+
+generating 5/16 "BatchDate"	  update: historical
+finished  5/16 "BatchDate"	  in: 0h:00m:00s:005ms total size: 88 B average speed: 17.2 KiB/s
+
+generating 6/16 "HR"	  rows: 1-15000 of 15000
+finished  6/16 "HR"	  in: 0h:00m:00s:034ms total size: 1.1 MiB average speed: 33.7 MiB/s
+
+generating 7/16 "CustomerMgmt"	  update: historical
+finished  7/16 "CustomerMgmt"	  in: 0h:00m:00s:400ms total size: 8.9 MiB average speed: 22.3 MiB/s
+
+generating 8/16 "Customer"	  update: 429/430
+finished  8/16 "Customer"	  in: 0h:00m:00s:008ms total size: 6.6 KiB average speed: 825.2 KiB/s
+
+generating 9/16 "Account"	  update: 429/430
+finished  9/16 "Account"	  in: 0h:00m:00s:003ms total size: 4.4 KiB average speed: 1.4 MiB/s
+
+generating 10/16 "Prospect"	  update: historical
+finished  10/16 "Prospect"	  in: 0h:00m:00s:135ms total size: 8.9 MiB average speed: 65.9 MiB/s
+
+generating 11/16 "Industry"	  rows: 1-102 of 102
+finished  11/16 "Industry"	  in: 0h:00m:00s:003ms total size: 2.7 KiB average speed: 889.3 KiB/s
+
+generating 12/16 "FINWIRE"	  update: historical
+finished  12/16 "FINWIRE"	  in: 0h:00m:00s:488ms total size: 22.2 MiB average speed: 45.6 MiB/s
+
+generating 13/16 "DailyMarket"	  update: historical
+finished  13/16 "DailyMarket"	  in: 0h:00m:01s:391ms total size: 72.1 MiB average speed: 51.8 MiB/s
+
+generating 14/16 "WatchHistory"	  update: historical
+finished  14/16 "WatchHistory"	  in: 0h:00m:00s:863ms total size: 40.0 MiB average speed: 46.3 MiB/s
+
+generating 15/16 "TradeSource"	  update: historical
+finished  15/16 "TradeSource"	  in: 0h:00m:03s:942ms total size: 105.9 MiB average speed: 26.9 MiB/s
+
+generating 16/16 "TradeType"	  rows: 1-5 of 5
+All work done
+Data generation finished successfully
+AuditTotalRecordsSummaryWriter - TotalRecords for Batch1: 4539962
+AuditTotalRecordsSummaryWriter - TotalRecords for Batch2: 19900
+AuditTotalRecordsSummaryWriter - TotalRecords for Batch3: 19855
+AuditTotalRecordsSummaryWriter - TotalRecords all Batches: 4579717 579417.64 records/second
+Statistics  
+=========
+Overall time	0h:00m:07s:903ms
+Generated	267.1 MiB
+Speed		33.8 MiB/s
+
+DIGen completed successfully.

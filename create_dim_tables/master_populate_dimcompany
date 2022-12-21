@@ -1,4 +1,9 @@
 /**
+DimCompany data is obtained from the FINWIRE files. All FINWIREyyyyQq files are processed
+in ascending year and quarter order, and records of type CMP are used. 
+CMP records may have content that is unchanged from prior CMP records, except for the PTS field. 
+Changes to DimCompany are implemented in a history-tracking manner, but unchanged records are not recorded. 
+CIK is the natural key for the Company data.
 When populating fields of the DimCompany table:
 - CompanyID is copied from CIK.
 - Name, SPRating, CEO, Description and FoundingDate are copied from CompanyName,
@@ -60,4 +65,4 @@ CREATE TEMP FUNCTION getStatus(status STRING)
   DATE(PTS) AS EffectiveDate, 
   CAST('9999-12-31' as DATE) AS EndDate
   FROM staging.finwire_cmp_record
-
+  WHERE RecType = 'CMP'

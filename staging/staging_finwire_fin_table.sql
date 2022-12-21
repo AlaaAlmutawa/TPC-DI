@@ -1,7 +1,7 @@
 --fin records
 -- Table 2.2.8
 
-create table staging.finwire_fin_record as 
+--create table staging.finwire_fin_record as 
 select 
   parse_datetime('%E4Y%m%d-%H%M%S',substr(record,1,15)) AS PTS, 
   trim(substr(record,16,3)) AS RecType, 
@@ -19,7 +19,14 @@ select
   cast(trim(substr(record,144,17)) as numeric) AS Liabilities,
   cast(trim(substr(record,161,13)) as INT64) AS ShOut,
   cast(trim(substr(record,174,13)) as INT64) AS DilutedShOut,
-  trim(substr(record,187,60)) AS CoNameOrCIK, 
+  case 
+    when char_length(trim(substr(record,187,60))) >= 10 then trim(substr(record,187,60))
+    ELSE NULL
+  END AS CompanyName,
+  case 
+    when char_length(trim(substr(record,187,60))) <= 10 then CAST(trim(substr(record,187,60)) AS INT64)
+    ELSE NULL
+  END AS CIK
   from 
   staging.finwire
   where 

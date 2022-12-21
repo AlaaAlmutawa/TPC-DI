@@ -14,7 +14,14 @@ select
   parse_date('%E4Y%m%d',trim(substr(record,133,8))) AS FirstTradeDate,
   parse_date('%E4Y%m%d',trim(substr(record,141,8))) AS FirstTradeExchg, 
   cast(trim(substr(record,149,12)) as numeric) AS Dividend, 
-  trim(substr(record,161,60)) AS CoNameOrCIK, 
+  case 
+    when char_length(trim(substr(record,161,60))) >= 10 then trim(substr(record,161,60))
+    ELSE NULL
+  END AS CompanyName,
+  case 
+    when char_length(trim(substr(record,161,60))) <= 10 then SAFE_CAST(trim(substr(record,161,60)) AS INT64)
+    ELSE NULL
+  END AS CIK
   from 
   staging.finwire
   where 

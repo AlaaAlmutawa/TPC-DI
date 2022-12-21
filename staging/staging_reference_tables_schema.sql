@@ -69,7 +69,7 @@ CREATE TABLE
     --Surrogate key for the time
     SK_TimeID INT64,
     --The time stored appropriately for doing comparisons in the Data Warehouse 
-    TimeValue STRING,
+    TimeValue TIME,
     --Hour number as a number, e.g. 01
     HourID INT64,
     --Hour number as text, e.g. “01”
@@ -118,6 +118,13 @@ CREATE TABLE
     TX_NAME STRING ,
     -- Tax rate
     TX_RATE NUMERIC 
+  );
+
+-- General schema for FINWIRE files 
+
+CREATE TABLE 
+  staging.finwire (
+    RECORD STRING
   );
 
 

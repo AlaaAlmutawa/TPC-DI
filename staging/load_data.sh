@@ -26,7 +26,7 @@ echo "load path: ${GS_BASE}"
 
 #bq mk $PROJECT ###SPECIFY LOCATION !!!!!!!!!
 
-echo -e "${GREEN}Starting data load into Dataset: ${PROJECT} from GCS Path: ${GS_BASE}"
+# echo -e "${GREEN}Starting data load into Dataset: ${PROJECT} from GCS Path: ${GS_BASE}"
 
 echo -e "${GREEN} Loading data into Table: ${PROJECT}.dim_date"
 
@@ -62,7 +62,7 @@ echo -e "${GREEN} Loading data into Table: ${PROJECT}.dim_time"
 
 bq load --project_id=tpc-di-370720 --field_delimiter '|' --null_marker='' --ignore_unknown_values ${PROJECT}.dim_time gs://${GS_BASE}/Time.txt \
 SK_TimeID:integer,\
-TimeValue:string,\
+TimeValue:time,\
 HourID:integer,\
 HourDesc:string,\
 MinuteID:integer,\
@@ -197,3 +197,10 @@ EmployeeJobCode:INT64,\
 EmployeeBranch:STRING,\
 EmployeeOffice:STRING,\
 EmployeePhone:STRING
+
+echo -e "${GREEN} Loading data into Table: ${PROJECT}.finwire"
+
+bq load --project_id=tpc-di-370720 --null_marker='' --ignore_unknown_values ${PROJECT}.finwire gs://${GS_BASE}/FINWIRE* \
+RECORD:string
+
+

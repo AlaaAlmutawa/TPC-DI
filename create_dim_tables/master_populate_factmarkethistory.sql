@@ -76,7 +76,7 @@ where dm2.DM_DATE <= dm1.DM_DATE and dm2.DM_DATE> DATE_SUB(dm1.DM_DATE, INTERVAL
 
 select * from
 (
-select *, row_number() over(partition by DM_S_SYMB, DM_DATE1 order by DM_HIGH) as rn
+select *, row_number() over(partition by DM_S_SYMB, DM_DATE1 order by DM_HIGH desc) as rn
 from merged
 )a where rn=1;
 ;

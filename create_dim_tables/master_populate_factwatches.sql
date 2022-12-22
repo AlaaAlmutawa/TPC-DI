@@ -18,13 +18,13 @@ watch_hist as
         d.SK_DateID as SK_DateID,
         W_ACTION
     from staging.watch_history wh
-    left join master.DimCustomer cust on wh.W_C_ID=cust.CustomerID
+    join master.DimCustomer cust on wh.W_C_ID=cust.CustomerID
         and (wh.W_DTS)>= cust.EffectiveDate 
         and (wh.W_DTS)<= cust.EndDate
-    left join master.DimSecurity s on wh.W_S_SYMB=s.Symbol
+    join master.DimSecurity s on wh.W_S_SYMB=s.Symbol
         and (wh.W_DTS)>= s.EffectiveDate 
         and (wh.W_DTS)<= s.EndDate
-    left join master.DimDate d on DATE(wh.W_DTS) = 	d.DateValue
+    join master.DimDate d on DATE(wh.W_DTS) = 	d.DateValue
     where s.IsCurrent and cust.IsCurrent
   )
 

@@ -1,15 +1,6 @@
 /*
-Data from: CustomerMgmt.xml
-
-1. When ./@ActionType is ‘NEW’ or ‘ADDACCT’
-
-2. AccountID, AccountDesc and TaxStatus fields are copied from
-Customer/Account/@CA_ID, Customer/Account/CA_NAME and
-Customer/Account/@CA_TAX_ST respectively.
-
-3. When ./@ActionType is ‘CLOSEACCT’
-
-master.dim_account(SK_AccountID INT64 NOT NULL,
+master.dim_account(
+    SK_AccountID INT64 NOT NULL,
     --Surrogate key for AccountID
     AccountID INT64 NOT NULL,
     --Customer account identifier
@@ -34,20 +25,58 @@ master.dim_account(SK_AccountID INT64 NOT NULL,
     );
 */
 
-
 -- insert into master.DimAccount
+
+with account_history as 
+(
+select 
+    CAST(CONCAT(FORMAT_DATE('%E4Y%m%d', c.Customer.ActionTS), '', CAST(c.Customer.Account.attr_CA_ID AS STRING)) AS INT64) as SK_AccountID,
+    LAST_VALUE(b.SK_BrokerID IGNORE NULLS) OVER acct AS SK_BrokerID,
+    cust.SK_CustomerID as SK_CustomerID,
+    c.Customer.Account.attr_CA_ID as AccountID,
+    CASE WHEN Customer.ActionTYPE IN ("INACT", "CLOSEACCT") THEN "INACTIVE"
+        ELSE "ACTIVE"
+        END AS Status,
+    LAST_VALUE(c.Customer.Account.CA_NAME IGNORE NULLS) OVER acct AS AccountDesc,
+    LAST_VALUE(c.Customer.Account.attr_CA_TAX_ST IGNORE NULLS) OVER acct AS TaxStatus,
+
+    1 as BatchID,
+    DATE(c.Customer.ActionTS) as EffectiveDate,
+    LEAD(DATE(c.Customer.ActionTS), 1, DATE("9999-12-31")) 
+        OVER acct as EndDate,
+    (c.Customer.ActionTS) as ActionDate
+from staging.customer_management c
+left join master.DimBroker b on  b.BrokerID = c.Customer.Account.CA_B_ID
+    and DATE(c.Customer.ActionTS)>= b.EffectiveDate 
+    and DATE(c.Customer.ActionTS)<= b.EndDate
+left join master.DimCustomer cust on cust.CustomerID = c.Customer.attr_C_ID 
+    and DATE(c.Customer.ActionTS)>= cust.EffectiveDate 
+    and DATE(c.Customer.ActionTS)<= cust.EndDate
+where c.Customer.ActionType in ("NEW","ADDACCT", "UPDACCT", "CLOSEACCT", "INACT")
+
+WINDOW
+    acct AS 
+    (PARTITION BY c.Customer.Account.attr_CA_ID 
+        ORDER BY c.Customer.ActionTS)
+)
+
 select 
     SK_AccountID,
-    c.Customer.Account.CA_B_ID as SK_BrokerID,
-    c.Customer.attr_C_ID as SK_CustomerID,
-    c.Customer.Account.attr_CA_ID as AccountID,
-    'ACTIVE' as Status,
-    c.Customer.Account.CA_NAME as AccountDesc,
-    c.Customer.Account.attr_CA_TAX_ST as TaxStatus,
-    True IsCurrent,
-    1 as BatchID,
-    c.Customer.ActionTS as EffectiveDate,
-    EndDate,
-    c.Customer.ActionType as Action
-from staging.customer_management c
-where c.Customer.ActionType in ("NEW", "ADDACCT");
+    AccountID,
+    SK_BrokerID,
+    SK_CustomerID,
+    Status,
+    AccountDesc,
+    TaxStatus,
+    CASE WHEN EndDate = DATE('9999-12-31') THEN TRUE
+      ELSE FALSE
+      END as IsCurrent,
+    BatchID,
+    EffectiveDate,
+    EndDate
+from account_history
+where EffectiveDate!=EndDate and AccountID is not null
+;
+
+
+

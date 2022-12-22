@@ -1,7 +1,8 @@
 /*
 ---- Schema of FactMarketHistory table -> Refer Page 43 3.2.11
 CREATE TABLE
-  master.fact_market_history ( SK_SecurityID INT64 NOT NULL,
+  master.fact_market_history ( 
+    SK_SecurityID INT64 NOT NULL,
     --Surrogate key for SecurityID
     SK_CompanyID INT64 NOT NULL,
     -- Surrogate key for CompanyID
@@ -51,6 +52,53 @@ CREATE TABLE
 -- limit 10
 -- ;
 
+--Works but takes forever tho like >5 mins
+
+with merged as 
+  (
+    select 
+    dm1.DM_S_SYMB,
+    dm1.DM_DATE as DM_DATE1, dm2.DM_DATE as DM_DATE2,
+    dm1.DM_HIGH as DM_HIGH1, dm2.DM_HIGH as DM_HIGH2,
+    dm1.DM_LOW as DM_LOW1, dm2.DM_LOW as DM_LOW2
+    from staging.daily_market dm1 
+    join staging.daily_market dm2 on dm1.DM_S_SYMB=dm2.DM_S_SYMB
+    where dm2.DM_DATE <= dm1.DM_DATE and dm2.DM_DATE> DATE_SUB(dm1.DM_DATE, INTERVAL 1 YEAR)
+    ),
+
+ranges as 
+  (
+    select DM_S_SYMB as Symbol,
+    DM_DATE1, 
+    DM_HIGH2 as FiftyTwoWeekHigh,
+    DM_DATE2 as SK_FiftyTwoWeekHighDate,
+    rn_high,
+    DM_LOW2 as FiftyTwoWeekLow,
+    DM_DATE2 as SK_FiftyTwoWeekLowDate,
+    rn_low
+    from
+      (
+      select *, 
+        row_number() over(partition by DM_S_SYMB, DM_DATE1 order by DM_HIGH2 desc, DM_DATE2 asc) as rn_high,
+        row_number() over(partition by DM_S_SYMB, DM_DATE1 order by DM_LOW2 asc, DM_DATE2 asc) as rn_low
+      from merged
+      ) a where rn_high=1 or rn_low=1
+      )
+
+select h.Symbol,h.DM_DATE1, h.FiftyTwoWeekHigh, h.SK_FiftyTwoWeekHighDate, 
+        l.FiftyTwoWeekLow, l.SK_FiftyTwoWeekLowDate
+from (
+  select distinct Symbol, DM_DATE1, FiftyTwoWeekHigh, SK_FiftyTwoWeekHighDate
+  from ranges
+  where rn_high=1) h , 
+  (select distinct Symbol, DM_DATE1, FiftyTwoWeekLow, SK_FiftyTwoWeekLowDate
+    from ranges
+    where rn_low=1
+  ) l
+where h.Symbol = l.Symbol and h.DM_DATE1 = l.DM_DATE1
+;
+-- need to do columnwise concat. Output it rowwise
+
 
 
 /*MANO MANO
@@ -65,48 +113,6 @@ WINDOW rolling_1yr_window AS (
 )
 ;
 -------------------------------------------------------------------------
---Works but takes forever tho like >5 mins
-
-with merged as 
-(select 
-dm1.DM_S_SYMB,
-dm1.DM_DATE as DM_DATE1, dm2.DM_DATE as DM_DATE2,
-dm1.DM_HIGH as DM_HIGH1, dm2.DM_HIGH as DM_HIGH2,
-dm1.DM_LOW as DM_LOW1, dm2.DM_LOW as DM_LOW2
-from staging.daily_market dm1 
-join staging.daily_market dm2 on dm1.DM_S_SYMB=dm2.DM_S_SYMB
-where dm2.DM_DATE <= dm1.DM_DATE and dm2.DM_DATE> DATE_SUB(dm1.DM_DATE, INTERVAL 1 YEAR)),
-ranges as 
-(select DM_S_SYMB as Symbol,
-DM_DATE1, 
-DM_HIGH2 as FiftyTwoWeekHigh,
-DM_DATE2 as SK_FiftyTwoWeekHighDate,
-rn_high,
-DM_LOW2 as FiftyTwoWeekLow,
-DM_DATE2 as SK_FiftyTwoWeekLowDate,
-rn_low
-from
-  (
-  select *, 
-    row_number() over(partition by DM_S_SYMB, DM_DATE1 order by DM_HIGH2 desc, DM_DATE2 asc) as rn_high,
-    row_number() over(partition by DM_S_SYMB, DM_DATE1 order by DM_LOW2 asc, DM_DATE2 asc) as rn_low
-  from merged
-  )a where rn_high=1 or rn_low=1)
-
-select h.Symbol,h.DM_DATE1, h.FiftyTwoWeekHigh, h.SK_FiftyTwoWeekHighDate, 
-l.FiftyTwoWeekLow, l.SK_FiftyTwoWeekLowDate
-from (select distinct Symbol, DM_DATE1, FiftyTwoWeekHigh, SK_FiftyTwoWeekHighDate
-  from ranges
-  where rn_high=1
-) h , 
-(select distinct Symbol, DM_DATE1, FiftyTwoWeekLow, SK_FiftyTwoWeekLowDate
-  from ranges
-  where rn_low=1
-) l
-where h.Symbol = l.Symbol and h.DM_DATE1 = l.DM_DATE1
-;
--- need to do columnwise concat. Output it rowwise
-
 
 -- TO ADD: If there are no earnings for this company, NULL is assigned to PERatio and an alert condition is raised as described below.
 select CompanyName, Year, Quarter, QtrStartDate, sum(EPS) as EPS

@@ -37,19 +37,17 @@ master.dim_account(SK_AccountID INT64 NOT NULL,
 
 -- insert into master.DimAccount
 select 
-as
-SK_AccountID
+    SK_AccountID,
     c.Customer.Account.CA_B_ID as SK_BrokerID,
     c.Customer.attr_C_ID as SK_CustomerID,
-c.Customer.Account.attr_CA_ID as AccountID,
+    c.Customer.Account.attr_CA_ID as AccountID,
     'ACTIVE' as Status,
-c.Customer.Account.CA_NAME as AccountDesc,
-c.Customer.Account.attr_CA_TAX_ST as TaxStatus,
+    c.Customer.Account.CA_NAME as AccountDesc,
+    c.Customer.Account.attr_CA_TAX_ST as TaxStatus,
     True IsCurrent,
     1 as BatchID,
     c.Customer.ActionTS as EffectiveDate,
-    --Beginning of date range when this record was the current record
-    EndDate
+    EndDate,
     c.Customer.ActionType as Action
 from staging.customer_management c
 where c.Customer.ActionType in ("NEW", "ADDACCT");

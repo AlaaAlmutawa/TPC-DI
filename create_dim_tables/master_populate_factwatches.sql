@@ -28,7 +28,7 @@ watch_hist as
     where s.IsCurrent and cust.IsCurrent
   )
 
-select
+select distinct
   wh.SK_CustomerID as SK_CustomerID,
   wh.SK_SecurityID as SK_SecurityID,
   wh.SK_DateID as SK_DateID_DatePlaced,

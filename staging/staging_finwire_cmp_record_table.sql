@@ -1,6 +1,6 @@
 --cmp records
 -- Table 2.2.8
-create table staging.finwire_cmp_record as 
+--create table staging.finwire_cmp_record as 
   select 
   parse_datetime('%E4Y%m%d-%H%M%S',substr(record,1,15)) AS PTS, 
   trim(substr(record,16,3)) AS RecType, 

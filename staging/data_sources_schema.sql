@@ -131,4 +131,34 @@ CREATE TABLE
 
     );
 
+-- CustomerManagement.xml temporary loaded
+CREATE TABLE staging.customer_historical (
+    CustomerID INT64 NOT NULL,
+    TaxID STRING(20) NOT NULL,
+    Status STRING(10) NOT NULL,
+    LastName STRING(30) NOT NULL,
+    FirstName STRING(30) NOT NULL,
+    MiddleInitial STRING(1),
+    Gender STRING(1),
+    Tier INT64,
+    DOB DATE,
+    AddressLine1 STRING(80) NOT NULL,
+    AddressLine2 STRING(80),
+    PostalCode STRING(12) NOT NULL,
+    City STRING(25) NOT NULL,
+    State_Prov STRING(20) NOT NULL,
+    Country STRING(24),
+    Phone1 STRING(30),
+    Phone2 STRING(30),
+    Phone3 STRING(30),
+    Email1 STRING(50),
+    Email2 STRING(50),
+    NationalTaxID STRING(20),
+    LocalTaxID STRING(20),
+    Action STRING(10),
+    EffectiveDate DATE NOT NULL,
+    EndDate DATE NOT NULL 
+);
+
+
 

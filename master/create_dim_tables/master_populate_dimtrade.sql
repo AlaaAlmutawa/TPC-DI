@@ -1,3 +1,43 @@
+/***
+
+DimTrade
+4.5.8 DimTrade data is obtained from the Trade.txt and TradeHistory.txt. 
+- If TH_ST_ID is 'SBMT' and T_TT_ID is either 'TMB' or 'TMS', or TH_ST_ID is 'PNDG',
+then SK_CreateDateID and SK_CreateTimeID must be set based on TH_DTS, with time
+truncated to 1-second resolution. SK_CloseDateID and SK_CloseTimeID must be set to
+NULL if a new DimTrade record is being inserted.
+- If TH_ST_ID is 'CMPT' or 'CNCL', SK_CloseDateID and SK_CloseTimeID must be set based
+on TH_DTS, with time truncated to 1-second resolution. SK_CreateDateID and
+SK_CreateTimeID must be set to NULL if a new DimTrade record is being inserted.
+- TradeID, CashFlag, Quantity, BidPrice, ExecutedBy, TradePrice, Fee, Commission and Tax
+are copied from T_ID, T_IS_CASH, T_QTY, T_BID_PRICE, T_EXEC_NAME, T_TRADE_PRICE,
+T_CHRG, T_COMM and T_TAX respectively.
+- Status is copied from ST_NAME of the StatusType table by matching T_ST_ID with ST_ID.
+- Type is copied from TT_NAME of the TradeType table by matching T_TT_ID with TT_ID.
+- SK_SecurityID and SK_CompanyID are copied from SK_SecurityID and SK_CompanyID of
+the DimSecurity table by matching T_S_SYMB with Symbol where TH_DTS is in the range
+given by EffectiveDate and EndDate. The match is guaranteed to succeed due to the
+referential integrity of the OLTP database. Note that these surrogate key values must
+reference the dimension record that is current at the earliest time this TradeID is
+encountered. If an update to a record is required in order to set the SK_CloseDateID and
+SK_CloseTimeID, these fields must not be updated. This dependency of DimTrade on
+DimSecurity requires that any update to a security's DimSecurity records must be
+completed before updates to that security's DimTrade records.
+- SK_AccountID, SK_CustomerID, and SK_BrokerID are copied from the SK_AccountID,
+SK_CustomerID, and SK_BrokerID fields of the DimAccount table by matching T_CA_ID
+with AccountID where TH_DTS is in the range given by EffectiveDate and EndDate. The
+match is guaranteed to succeed due to the referential integrity of the OLTP database.
+Note that these surrogate key values must reference the dimension record that is current
+at the earliest time this TradeID is encountered. If an update to a record is required in
+order to set the SK_CloseDateID and SK_CloseTimeID, these fields must not be updated.
+This dependency of DimTrade on DimAccount requires that any update to an account's
+DimAccount records must be completed before updates to that account's DimTrade
+records.
+BatchID is set as described in section 4.4.2 at the time the record is initially created.
+
+***/
+
+
 -- insert into master.DimTrade
 
 WITH base_trade as(

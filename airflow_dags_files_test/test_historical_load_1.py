@@ -22,7 +22,7 @@ default_args = {
     'retries': 0
 }
 
-with DAG('historical_load_test', schedule_interval=None, default_args=default_args) as dag:
+with DAG('historical_load_test_1', schedule_interval=None, default_args=default_args) as dag:
 
     create_staging_tables = execute_sql(task_id='create_staging_tables',
                                                 sql_file_path='queries_test/data_sources_schema_dag.sql')

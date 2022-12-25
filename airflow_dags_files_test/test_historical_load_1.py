@@ -203,7 +203,7 @@ with DAG('historical_load_test', schedule_interval=None, default_args=default_ar
         bucket=GCS_BUCKET,
         source_objects=['sf3/Batch1/Industry.txt'],
         field_delimiter='|',
-        destination_project_dataset_table='master1.industry',
+        destination_project_dataset_table='master1.Industry',
         write_disposition='WRITE_TRUNCATE',
         autodetect=True,
         bigquery_conn_id=BIG_QUERY_CONN_ID,

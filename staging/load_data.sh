@@ -203,4 +203,14 @@ echo -e "${GREEN} Loading data into Table: ${PROJECT}.finwire"
 bq load --project_id=tpc-di-370720 --null_marker='' --ignore_unknown_values ${PROJECT}.finwire gs://${GS_BASE}/FINWIRE* \
 RECORD:string
 
+echo -e "${GREEN} Loading data into Table: ${PROJECT}.audit"
+
+bq load --project_id=tpc-di-370720 --field_delimiter ',' --null_marker='' --skip_leading_rows=1 --ignore_unknown_values ${PROJECT}.audit gs://${GS_BASE}/audit/* \
+DataSet:STRING,\
+BatchID:INT64,\
+Date:DATE,\
+Attribute:STRING,\
+Value:NUMERIC,\
+DValue:NUMERIC
+
 

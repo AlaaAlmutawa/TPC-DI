@@ -188,9 +188,9 @@ CREATE TABLE master1.DimTrade (
 );
 
 ---Dimension Messages
-DROP TABLE IF EXISTS master1.DimMessages;
+DROP TABLE IF EXISTS master1.DiMessages;
 
-CREATE TABLE master1.DimMessages (
+CREATE TABLE master1.DiMessages (
     MessageDateAndTime DATETIME NOT NULL,
     BatchID INT64 NOT NULL,
     MessageSource STRING(30),

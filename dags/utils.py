@@ -1,4 +1,5 @@
-from typing import List, Dict
+## Reference to idea: https://github.com/snithish/tpc-di_benchmark
+## utils.py script was adjusted for our usecase. 
 
 from airflow.contrib.operators.bigquery_operator import BigQueryOperator
 from airflow.contrib.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOperator

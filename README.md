@@ -68,6 +68,8 @@ mkdir key
 mkdir tpc-di_resources/gcs/data/transform
 ```
 
+2. Place the same JSON key created for the service account into the key folder. 
+
 ## Executing the DAG on Airflow 
 
 ### Constants.py 

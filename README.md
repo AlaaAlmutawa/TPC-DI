@@ -59,6 +59,15 @@ This will enable Airflow to call Big Query and Google Cloud Storage operators
 
 ![](images/connect_airflow_to_gcs_bq2.png)
 
+### Create necessary directories inside dags folder
+
+1. Create the below two directories inside the dags folder 
+
+```console
+mkdir key 
+mkdir tpc-di_resources/gcs/data/transform
+```
+
 ## Executing the DAG on Airflow 
 
 ### Constants.py 

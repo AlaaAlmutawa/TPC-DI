@@ -18,11 +18,13 @@ sudo docker-compose up -d
 ```
 ## Before running the dag
 
+### Upload data into GCS Bucket 
+
 1. Create a GCS bucket and upload Batch 1 data files for the desired SF in the following directory structure tpc_di_staging_files/sf[scale]/Batch1. Where scale is a numeric value. 
 
 #### In our specific implementation data was generated using DIGen.jar in a docker container running CentOS. (running DIGen.jar requires installaing java: yum install a java-1.8.0-openjdk)
 
-## Create a service account in GCP 
+### Create a service account in GCP 
 
 This will enable Airflow to call Big Query and Google Cloud Storage operators
 
@@ -45,7 +47,7 @@ This will enable Airflow to call Big Query and Google Cloud Storage operators
 
 5. Download the key as JSON 
 
-## Connecting Airflow to Big Query and Google Cloud Storage 
+### Connect Airflow to Big Query and Google Cloud Storage 
 
 1. Go to Airflow UI, then click on Admin tab and select Connections
 

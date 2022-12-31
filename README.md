@@ -70,6 +70,8 @@ mkdir tpc-di_resources/gcs/data/transform
 
 2. Place the same JSON key created for the service account into the key folder. 
 
+3. Update path_to_private_key variable in customer_mgmt_helpers.py to match the json key file name. 
+
 ## Executing the DAG on Airflow 
 
 ### Constants.py 

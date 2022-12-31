@@ -76,6 +76,7 @@ You can trigger the following DAG: tpc_di_historical_load_v2.2.1
 ##### Credits
 [snithish/tpc-di_benchmark GitHub repository](https://github.com/snithish/tpc-di_benchmark) that helped us understand how to create Airflow environment suitable for this implementation as well as further understand the transformations.
 
+###### This is a group project apart of INFO-H419: Data Warehouse course at ULB and was completed by: Koumudi, Adina, Zyad, Alaa
 
 
 

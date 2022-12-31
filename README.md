@@ -28,7 +28,7 @@ This will enable Airflow to call Big Query and Google Cloud Storage operators
 
 1. Go to your project, and then navigate to APIs & Services -> Credentials. 
 
-(images/create_credentials1.png)
+![](images/create_credentials1.png)
 
 2. Click on Create Credientials -> Sevice Account 
 

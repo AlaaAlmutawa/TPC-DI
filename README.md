@@ -32,16 +32,16 @@ This will enable Airflow to call Big Query and Google Cloud Storage operators
 
 2. Click on Create Credientials -> Sevice Account 
 
-(images/create_credentials2.png)
+![](images/create_credentials2.png)
 
 3. Give the service account Big Query and Google Cloud Storage Admin roles 
 
-(images/create_credentials3_roles.png)
+![](images/create_credentials3_roles.png)
 
 4. Go to the newly created service account and add a new key
 
-(images/create_keys1.png)
-(images/create_keys2_add_key_json.png)
+![](images/create_keys1.png)
+![](images/create_keys2_add_key_json.png)
 
 5. Download the key as JSON 
 
@@ -49,13 +49,13 @@ This will enable Airflow to call Big Query and Google Cloud Storage operators
 
 1. Go to Airflow UI, then click on Admin tab and select Connections
 
-(images/connect_airflow_to_gcs_bq.png)
+![](images/connect_airflow_to_gcs_bq.png)
 
 2. Click on the edit icon for Big Query Default. Input the Project Id and paste the json key content. 
 
 3. The same should be done for Google Cloud Default connection. 
 
-(images/connect_airflow_to_gcs_bq2.png)
+![](images/connect_airflow_to_gcs_bq2.png)
 
 ## Executing the DAG on Airflow 
 

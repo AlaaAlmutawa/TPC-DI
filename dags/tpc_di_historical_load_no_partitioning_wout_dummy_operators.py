@@ -6,8 +6,7 @@ from airflow.operators.bash_operator import BashOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
 from constants import CSV_EXTENSION, GCS_BUCKET, BIG_QUERY_CONN_ID, GOOGLE_CLOUD_DEFAULT, SF
-from utils import construct_gcs_to_bq_operator, get_file_path, insert_overwrite, reset_table, insert_if_empty, \
-    execute_sql
+from utils import insert_overwrite, execute_sql
 from customer_mgmt_helpers import get_customer_mgmt_xml, push_customer_mgmt_json, convert_xml_to_json
 
 
